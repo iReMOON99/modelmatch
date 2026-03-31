@@ -1,0 +1,60 @@
+generator client {
+  provider   = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  MODEL
+  AGENCY
+  ADMIN
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  role          UserRole
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  modelProfile  ModelProfile?
+  agencyProfile AgencyProfile?
+}
+
+model ModelProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+  displayName  String?
+  age          Int?
+  country      String?
+  city         String?
+  height       Int?
+  measurements String?
+  bio          String?
+  experience   String?
+  photoUrl     String?
+  isVerified   Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AgencyProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  companyName String
+  country     String?
+  city        String?
+  description String?
+  website     String?
+  instagram   String?
+  isVerified  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

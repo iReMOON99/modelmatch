@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "prisma:seed": "node --loader ts-node/esm prisma/seed.ts"
+    "build": "npx prisma generate",
+    "postinstall": "npm run build"
   },
   "prisma": {
     "seed": "node --loader ts-node/esm prisma/seed.ts"
